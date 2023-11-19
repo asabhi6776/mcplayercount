@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minecraft Server Status</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    .result {
+      margin-top: 20px;
+    }
+
+    .error {
+      color: #ff0000;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Minecraft Server Status Checker</h1>
+
+  <form id="serverForm">
+    <label for="serverAddress">Enter Minecraft Server Address:</label>
+    <input type="text" id="serverAddress" name="serverAddress" required>
+    <button type="button" onclick="checkServerStatus()">Check Status</button>
+  </form>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    function checkServerStatus() {
+      var serverAddress = document.getElementById('serverAddress').value;
+
+      fetch('/get_players/' + serverAddress)
+        .then(response => response.json())
+        .then(data => {
+          var resultDiv = document.getElementById('result');
+          resultDiv.innerHTML = '<p>Server Address: ' + data.server_address + '</p>' +
+            '<p>Online Players: ' + data.online_players + '</p>';
+        })
+        .catch(error => {
+          var resultDiv = document.getElementById('result');
+          resultDiv.innerHTML = '<p class="error">Error: ' + error + '</p>';
+        });
+    }
+  </script>
+</body>
+
+</html>
